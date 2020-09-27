@@ -1,32 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Footer from "./Footer";
 import Header from "./Header";
-import { getProducts } from './services/productService'
+import useFech from './services/useFetch'
 
 export default function App() {
   const [size, setSize] = useState("");
-  const [products, setProducts] = useState([])
-  const [error, setError] = useState(false)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    getShoes()
-  }, [])
-
-  async function getShoes() {
-    try {
-      const shoes = await getProducts("shoes")
-      setProducts(shoes)
-    } catch (error) {
-      setError(error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { data: products, error, loading } = useFech("products?category=shoes")
 
   // Derived State Example
   const filteredProducts = size ? products.filter((p) => p.skus.find((s) => s.size === parseInt(size))) : products;
+  console.log(filteredProducts)
 
   function renderProduct(p) {
     return (
