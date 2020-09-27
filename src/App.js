@@ -11,12 +11,19 @@ export default function App() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    //const data = await getProducts("products?category=shoes")
-    getProducts("shoes")
-      .then(res => setProducts(res))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
+    getShoes()
   }, [])
+
+  async function getShoes() {
+    try {
+      const shoes = await getProducts("shoes")
+      setProducts(shoes)
+    } catch (error) {
+      setError(error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   // Derived State Example
   const filteredProducts = size ? products.filter((p) => p.skus.find((s) => s.size === parseInt(size))) : products;
@@ -34,7 +41,7 @@ export default function App() {
   }
 
   if (error) throw error// error is already handled by Error Boundary
-  if (loading) return '<h2>Loading.............</h2>'
+  if (loading) return <h2>Loading.............</h2>
 
   return (
     <>
