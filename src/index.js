@@ -4,10 +4,13 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import ErrorBoundary from './ErrorBoundry'
+import { BrowserRouter } from 'react-router-dom'
 
 ReactDOM.render(
   <ErrorBoundary>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </ErrorBoundary>,
   document.getElementById('root')
 );
