@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useFetch from "./services/useFetch";
 import Spinner from "./Spinner";
 import PageNotFound from "./PageNotFound";
 
-export default function Detail() {
+export default function Detail(props) {
     const { id } = useParams();
     const navigate = useNavigate();
+    const [sku, setSku] = useState("");
     const { data: product, loading, error } = useFetch(`products/${id}`);
 
     if (loading) return <Spinner />;
@@ -18,8 +19,25 @@ export default function Detail() {
             <h1>{product.name}</h1>
             <p>{product.description}</p>
             <p id="price">${product.price}</p>
+
+            <select id="size" value={sku} onChange={(e) => setSku(e.target.value)}>
+                <option value="">What size?</option>
+                {product.skus.map((s) => (
+                    <option key={s.sku} value={s.sku}>
+                        {s.size}
+                    </option>
+                ))}
+            </select>
+
             <p>
-                <button className="btn btn-primary" onClick={() => navigate("/cart")}>
+                <button
+                    disabled={!sku}
+                    className="btn btn-primary"
+                    onClick={() => {
+                        props.addToCart(id, sku);
+                        navigate("/cart");
+                    }}
+                >
                     Add to cart
         </button>
             </p>
